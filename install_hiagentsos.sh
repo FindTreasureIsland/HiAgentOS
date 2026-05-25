@@ -21,7 +21,7 @@ case "${1:-}" in
   -h|--help|help)
     cat <<EOF
 Usage:
-  $(basename "$0") [install] [server_root] [member ...]
+  $(basename "$0") [install] [server_root]
   $(basename "$0") clean [server_root]
 
 Commands:
@@ -94,7 +94,11 @@ prompt_for_root_dir() {
   local input_root
 
   printf "HiAgentsOS server root [%s]: " "$ROOT_DIR"
-  read -r input_root
+  if [ -r /dev/tty ]; then
+    read -r input_root </dev/tty
+  else
+    read -r input_root
+  fi
 
   if [ -n "$input_root" ]; then
     ROOT_DIR="$input_root"
@@ -107,7 +111,11 @@ prompt_for_members() {
 
   while [ ${#MEMBERS[@]} -eq 0 ]; do
     printf "User Agent names to %s (comma or space separated, for example: user1,user2): " "$COMMAND"
-    read -r input_members
+    if [ -r /dev/tty ]; then
+      read -r input_members </dev/tty
+    else
+      read -r input_members
+    fi
 
     normalized_members="${input_members//,/ }"
     # shellcheck disable=SC2206

@@ -1,5 +1,14 @@
 # HiAgentOS
 
+```text
+ _   _ _    _                    _    ___  ____
+| | | (_)  / \   __ _  ___ _ __ | |_ / _ \/ ___|
+| |_| | | / _ \ / _` |/ _ \ '_ \| __| | | \___ \
+|  _  | |/ ___ \ (_| |  __/ | | | |_| |_| |___) |
+|_| |_|_/_/   \_\__, |\___|_| |_|\__|\___/|____/
+                |___/
+```
+
 HiAgentOS is a lightweight workspace template for organizing AI-assisted team work. It provides a shared `public/` knowledge space, per-user workspaces, Agent collaboration rules, document templates, and a server-side installer for initializing and cleaning a HiAgentOS workspace.
 
 ## What It Includes
@@ -20,14 +29,16 @@ HiAgentOS is a lightweight workspace template for organizing AI-assisted team wo
 Run directly with `curl`:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/FindTreasureIsland/HiAgentOS/main/install_hiagentsos.sh | bash -s -- /path/to/server alice bob
+curl -fsSL https://raw.githubusercontent.com/FindTreasureIsland/HiAgentOS/main/install_hiagentsos.sh | bash -s -- /path/to/server
 ```
 
 Or use the explicit install command:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/FindTreasureIsland/HiAgentOS/main/install_hiagentsos.sh | bash -s -- install /path/to/server alice bob
+curl -fsSL https://raw.githubusercontent.com/FindTreasureIsland/HiAgentOS/main/install_hiagentsos.sh | bash -s -- install /path/to/server
 ```
+
+The installer will prompt for User Agent names during setup.
 
 Clean user directories with `curl`:
 
@@ -40,13 +51,13 @@ When the installer is run through `curl`, it automatically downloads the `HiAgen
 Install a HiAgentOS server workspace:
 
 ```bash
-./install_hiagentsos.sh /path/to/server alice bob
+./install_hiagentsos.sh /path/to/server
 ```
 
 Or use the explicit command:
 
 ```bash
-./install_hiagentsos.sh install /path/to/server alice bob
+./install_hiagentsos.sh install /path/to/server
 ```
 
 This creates:
