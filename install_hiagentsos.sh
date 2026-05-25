@@ -411,6 +411,42 @@ create_member_server_workspace() {
 "
 }
 
+create_or_update_symlink() {
+  local target_path="$1"
+  local link_path="$2"
+
+  if [ -e "$link_path" ] && [ ! -L "$link_path" ]; then
+    printf "Warning: skipped existing non-symlink path: %s\n" "$link_path" >&2
+    return
+  fi
+
+  ln -sfn "$target_path" "$link_path"
+}
+
+create_member_workspace_view() {
+  local member_id="$1"
+  local workspace_member_dir="$ROOT_DIR/workspace/$member_id"
+
+  mkdir -p "$workspace_member_dir"
+
+  create_or_update_symlink "../../public" "$workspace_member_dir/public"
+  create_or_update_symlink "../../$member_id" "$workspace_member_dir/$member_id"
+
+  if [ -f "$ROOT_DIR/public/AGENTS.md" ]; then
+    cp -p "$ROOT_DIR/public/AGENTS.md" "$workspace_member_dir/AGENTS.MD"
+  fi
+}
+
+create_workspace_views() {
+  local member
+
+  mkdir -p "$ROOT_DIR/workspace"
+
+  for member in "${MEMBERS[@]}"; do
+    create_member_workspace_view "$member"
+  done
+}
+
 init_git_repo_if_needed() {
   local repo_dir="$1"
 
@@ -489,6 +525,8 @@ for member in "${MEMBERS[@]}"; do
   create_member_server_workspace "$member"
 done
 
+create_workspace_views
+
 init_server_repos
 
 cat <<EOF
@@ -503,6 +541,9 @@ $(printf '  - %s\n' "${MEMBERS[@]}")
 Initialized Git repositories:
   - public
 $(printf '  - %s\n' "${MEMBERS[@]}")
+
+Workspace views:
+$(printf '  - workspace/%s\n' "${MEMBERS[@]}")
 
 Next step:
   Review public/01规则文档/HermesAgent协作规则.md

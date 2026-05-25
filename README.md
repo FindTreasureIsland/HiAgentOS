@@ -66,10 +66,21 @@ This creates:
 /path/to/server/
 ├── public/
 ├── alice/
-└── bob/
+├── bob/
+└── workspace/
+    ├── alice/
+    │   ├── AGENTS.MD
+    │   ├── public -> ../../public
+    │   └── alice -> ../../alice
+    └── bob/
+        ├── AGENTS.MD
+        ├── public -> ../../public
+        └── bob -> ../../bob
 ```
 
 The installer also initializes separate Git repositories for `public/` and each user directory, and updates `public/AGENTS.md` with the configured members.
+
+Each `workspace/{member}/` directory is the recommended directory to bind into a HermesAgent profile. It contains symlinks to the shared `public/` directory and the member's personal directory, plus a copied `AGENTS.MD` file for profile-local rule reading.
 
 Clean all user directories from a server workspace:
 
@@ -77,7 +88,7 @@ Clean all user directories from a server workspace:
 ./install_hiagentsos.sh clean /path/to/server
 ```
 
-The `clean` command removes first-level user directories under the server root, keeps `public/`, and clears the member table and Profile list in `public/AGENTS.md`.
+The `clean` command removes first-level user directories and `workspace/` under the server root, keeps `public/`, and clears the member table and Profile list in `public/AGENTS.md`.
 
 ## Workspace Model
 
@@ -85,6 +96,7 @@ HiAgentOS separates shared and personal work:
 
 - `public/` is the shared company or team space. It contains templates, rules, project coordination documents, dashboards, and decision records.
 - `{member}/` is a personal Agent workspace. It contains personal rules, OKRs, work plans, archives, and personal documents.
+- `workspace/{member}/` is the profile-facing workspace view. It links to `public/` and `{member}/`, and includes `AGENTS.MD`.
 - `public/AGENTS.md` is the main Agent-facing rule document. Agents should read it first and write the rules into HermesAgent's `Rule.md` for long-term rule memory.
 
 ## Notes
