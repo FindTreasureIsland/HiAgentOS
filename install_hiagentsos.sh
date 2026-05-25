@@ -3,6 +3,8 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PUBLIC_TEMPLATE_DIR="$SCRIPT_DIR/HiAgentsOS/public"
+REMOTE_ARCHIVE_URL="https://github.com/FindTreasureIsland/HiAgentOS/archive/refs/heads/main.tar.gz"
+TEMP_TEMPLATE_ROOT=""
 COMMAND="install"
 ROOT_DIR="$(pwd)"
 ROOT_DIR_PROVIDED=0
@@ -43,6 +45,45 @@ print_banner() {
 |_| |_|_/_/   \_\__, |\___|_| |_|\__|\___/|____/
                 |___/
 EOF
+}
+
+cleanup_temp_template() {
+  if [ -n "$TEMP_TEMPLATE_ROOT" ] && [ -d "$TEMP_TEMPLATE_ROOT" ]; then
+    rm -rf -- "$TEMP_TEMPLATE_ROOT"
+  fi
+}
+
+trap cleanup_temp_template EXIT
+
+prepare_public_template_dir() {
+  if [ -d "$PUBLIC_TEMPLATE_DIR" ]; then
+    return
+  fi
+
+  if ! command -v curl >/dev/null 2>&1; then
+    printf "Error: curl is required to download the HiAgentOS template.\n" >&2
+    exit 1
+  fi
+
+  if ! command -v tar >/dev/null 2>&1; then
+    printf "Error: tar is required to extract the HiAgentOS template.\n" >&2
+    exit 1
+  fi
+
+  TEMP_TEMPLATE_ROOT="$(mktemp -d)"
+
+  if [ -n "${GITHUB_TOKEN:-}" ]; then
+    curl -fsSL -H "Authorization: Bearer $GITHUB_TOKEN" "$REMOTE_ARCHIVE_URL" | tar -xz -C "$TEMP_TEMPLATE_ROOT"
+  else
+    curl -fsSL "$REMOTE_ARCHIVE_URL" | tar -xz -C "$TEMP_TEMPLATE_ROOT"
+  fi
+
+  PUBLIC_TEMPLATE_DIR="$TEMP_TEMPLATE_ROOT/HiAgentOS-main/HiAgentsOS/public"
+
+  if [ ! -d "$PUBLIC_TEMPLATE_DIR" ]; then
+    printf "Error: downloaded HiAgentOS template is missing public/.\n" >&2
+    exit 1
+  fi
 }
 
 prompt_for_root_dir() {
@@ -130,6 +171,10 @@ else
 fi
 
 print_banner
+
+if [ "$COMMAND" = "install" ]; then
+  prepare_public_template_dir
+fi
 
 write_file_if_missing() {
   local file_path="$1"

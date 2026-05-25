@@ -17,6 +17,32 @@ HiAgentOS is a lightweight workspace template for organizing AI-assisted team wo
 
 ## Usage
 
+Run directly with `curl`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/FindTreasureIsland/HiAgentOS/main/install_hiagentsos.sh | bash -s -- /path/to/server alice bob
+```
+
+For the current private GitHub repository, run with a GitHub token that can read the repository:
+
+```bash
+GITHUB_TOKEN="YOUR_GITHUB_TOKEN" bash -c 'curl -fsSL -H "Authorization: Bearer $GITHUB_TOKEN" https://raw.githubusercontent.com/FindTreasureIsland/HiAgentOS/main/install_hiagentsos.sh | GITHUB_TOKEN="$GITHUB_TOKEN" bash -s -- /path/to/server alice bob'
+```
+
+Or use the explicit install command:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/FindTreasureIsland/HiAgentOS/main/install_hiagentsos.sh | bash -s -- install /path/to/server alice bob
+```
+
+Clean user directories with `curl`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/FindTreasureIsland/HiAgentOS/main/install_hiagentsos.sh | bash -s -- clean /path/to/server
+```
+
+When the installer is run through `curl`, it automatically downloads the `HiAgentsOS/public` template from the GitHub repository before creating the workspace.
+
 Install a HiAgentOS server workspace:
 
 ```bash
