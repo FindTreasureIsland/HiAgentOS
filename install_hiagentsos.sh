@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_PATH="${BASH_SOURCE[0]:-$0}"
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
 PUBLIC_TEMPLATE_DIR="$SCRIPT_DIR/HiAgentsOS/public"
 REMOTE_ARCHIVE_URL="https://github.com/FindTreasureIsland/HiAgentOS/archive/refs/heads/main.tar.gz"
 TEMP_TEMPLATE_ROOT=""
