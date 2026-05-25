@@ -26,7 +26,7 @@ curl -fsSL https://raw.githubusercontent.com/FindTreasureIsland/HiAgentOS/main/i
 For the current private GitHub repository, run with a GitHub token that can read the repository:
 
 ```bash
-GITHUB_TOKEN="YOUR_GITHUB_TOKEN" bash -c 'curl -fsSL -H "Authorization: Bearer $GITHUB_TOKEN" https://raw.githubusercontent.com/FindTreasureIsland/HiAgentOS/main/install_hiagentsos.sh | GITHUB_TOKEN="$GITHUB_TOKEN" bash -s -- /path/to/server alice bob'
+GITHUB_TOKEN="YOUR_GITHUB_TOKEN" bash -c 'curl -fsSL -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github.raw" "https://api.github.com/repos/FindTreasureIsland/HiAgentOS/contents/install_hiagentsos.sh?ref=main" | GITHUB_TOKEN="$GITHUB_TOKEN" bash -s -- /path/to/server alice bob'
 ```
 
 Or use the explicit install command:
